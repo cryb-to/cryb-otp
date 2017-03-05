@@ -1,0 +1,11 @@
+AM_CPPFLAGS = -I$(top_srcdir)/include
+
+lib_LTLIBRARIES = libcryb-otp.la
+
+libcryb_otp_la_SOURCES = \
+	\
+	cryb_otp.c
+
+libcryb_otp_la_LIBADD = \
+	$(CRYB_CORE_LIBS) \
+	$(CRYB_OATH_LIBS)

@@ -1,0 +1,5 @@
+SUBDIRS =
+
+if OTP_LIB
+SUBDIRS += otp
+endif OTP_LIB

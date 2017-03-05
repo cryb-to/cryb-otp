@@ -1,0 +1,41 @@
+#!/bin/sh
+
+has() {
+	which "$@" >/dev/null 2>&1
+}
+
+# BullseyeCoverage needs to know exactly which compiler we're using
+if has "${CC}" "${CXX}" ; then
+	echo "using CC=${CC}"
+elif has clang clang++ ; then
+	echo "using Clang"
+	export CC="${CC:-clang}"
+	export CXX="${CXX:-clang++}"
+elif has gcc g++ ; then
+	echo "using GCC"
+	export CC="${CC:-gcc}"
+	export CXX="${CXX:-g++}"
+else
+	echo "WARNING: using default compiler," \
+	    "coverage analysis may not work"
+fi
+export CPP="${CPP:-${CC} -E}"
+
+set -e
+
+if has cov01 ; then
+	cov01 -qu
+	cov01 -q0
+fi
+
+. ./autogen.sh
+
+./configure \
+    --enable-all \
+    --enable-developer-warnings \
+    --enable-werror \
+    "$@"
+
+if has cov01 ; then
+	cov01 -qo
+fi
