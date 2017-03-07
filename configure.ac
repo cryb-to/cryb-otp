@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([cryb.otp], [devel], [des@des.no], [cryb-otp], [http://cryb.to/])
+AC_INIT([cryb.otp], [0.20130307], [des@des.no], [cryb-otp], [http://cryb.to/])
 AC_CONFIG_SRCDIR([include/cryb/otp.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign no-dist-gzip dist-xz])
