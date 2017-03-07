@@ -12,7 +12,7 @@ TESTS =
 # c++ header test
 TESTS += t_cxx
 t_cxx_SOURCES = t_cxx.cc
-t_cxx_CPPFLAGS = $(AM_CPPFLAGS)
+t_cxx_CPPFLAGS = $(AM_CPPFLAGS) $(CRYB_CORE_CFLAGS)
 t_cxx_LDADD =
 if OTP_LIB
 t_cxx_CPPFLAGS += -DWITH_OTP_LIB
