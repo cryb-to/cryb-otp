@@ -39,6 +39,10 @@ AC_TYPE_UINTPTR_T
 LT_PREREQ([2.2.6])
 LT_INIT()
 
+# pkg-config
+PKG_PROG_PKG_CONFIG
+PKG_INSTALLDIR
+
 # other programs
 AC_PROG_INSTALL
 
@@ -76,40 +80,13 @@ AC_CHECK_FUNCS([wcslcat wcslcmp wcslcpy])
 # Extra libraries
 #
 
-# cryb-core
-save_LIBS="${LIBS}"
-LIBS=""
-AC_SEARCH_LIBS([cryb_core_version], [cryb-core], [
-  CRYB_CORE_LIBS="${LIBS}"
-], [
-  AC_MSG_ERROR([cryb-core library not found])
-])
-LIBS="${save_LIBS}"
-AC_SUBST(CRYB_CORE_LIBS)
-
-# cryb-oath
-save_LIBS="${LIBS}"
-LIBS=""
-AC_SEARCH_LIBS([cryb_oath_version], [cryb-oath], [
-  CRYB_OATH_LIBS="${LIBS}"
-], [
-  AC_MSG_ERROR([cryb-oath library not found])
-])
-LIBS="${save_LIBS}"
-AC_SUBST(CRYB_OATH_LIBS)
-
-# cryb-test
-save_LIBS="${LIBS}"
-LIBS=""
-AC_SEARCH_LIBS([cryb_test_version], [cryb-test], [
-  CRYB_TEST_LIBS="${LIBS}"
-], [
-  CRYB_TEST_LIBS=""
-  AC_MSG_WARN([cryb-test library not found, unit tests disabled])
-])
-LIBS="${save_LIBS}"
-AC_SUBST(CRYB_TEST_LIBS)
-AM_CONDITIONAL([WITH_CRYB_TEST], [ test x"$CRYB_TEST_LIBS" != x"" ])
+# Cryb.to components
+PKG_HAVE_WITH_MODULES([CRYB_CORE], [cryb-core],
+  [Cryb.to core utilities])
+PKG_HAVE_WITH_MODULES([CRYB_OATH], [cryb-oath],
+  [Cryb.to Open Authentication primitives])
+PKG_HAVE_WITH_MODULES([CRYB_TEST], [cryb-test],
+  [Cryb.to test framework])
 
 # libpam
 save_LIBS="${LIBS}"
@@ -248,6 +225,7 @@ AC_CONFIG_FILES([
     include/cryb/Makefile
     lib/Makefile
     lib/otp/Makefile
+    lib/otp/cryb-otp.pc
     pam/Makefile
     pam/pam_otp/Makefile
     libexec/Makefile

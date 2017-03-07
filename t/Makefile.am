@@ -2,7 +2,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 
 EXTRA_DIST =
 
-if WITH_CRYB_TEST
+if HAVE_CRYB_TEST
 
 libotp = $(top_builddir)/lib/otp/libcryb-otp.la
 
@@ -25,4 +25,4 @@ endif OTP_LIB
 
 check_PROGRAMS = $(TESTS)
 
-endif WITH_CRYB_TEST
+endif HAVE_CRYB_TEST

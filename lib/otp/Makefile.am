@@ -9,3 +9,5 @@ libcryb_otp_la_SOURCES = \
 libcryb_otp_la_LIBADD = \
 	$(CRYB_CORE_LIBS) \
 	$(CRYB_OATH_LIBS)
+
+pkgconfig_DATA = cryb-otp.pc
