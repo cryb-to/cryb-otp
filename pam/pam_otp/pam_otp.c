@@ -31,6 +31,8 @@
 
 #define PAM_SM_AUTH
 
+#include <stdint.h>
+
 #include <security/pam_modules.h>
 #include <security/pam_appl.h>
 
