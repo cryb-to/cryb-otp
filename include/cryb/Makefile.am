@@ -7,4 +7,4 @@ cryb_HEADERS += otp.h
 endif OTP_LIB
 
 noinst_HEADERS = \
-	otp-impl.h
+	impl.h

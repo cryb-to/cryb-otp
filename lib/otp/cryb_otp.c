@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  */
 
-#include "cryb/otp-impl.h"
+#include "cryb/impl.h"
 
 #include <stdint.h>
 #include <unistd.h>

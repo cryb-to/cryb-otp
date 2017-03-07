@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2017 Dag-Erling Smørgrav
+ * Copyright (c) 2014-2016 Dag-Erling Smørgrav
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,8 +27,8 @@
  * SUCH DAMAGE.
  */
 
-#ifndef CRYB_OTP_IMPL_H_INCLUDED
-#define CRYB_OTP_IMPL_H_INCLUDED
+#ifndef CRYB_IMPL_H_INCLUDED
+#define CRYB_IMPL_H_INCLUDED
 
 #if HAVE_CONFIG_H
 #include "config.h"

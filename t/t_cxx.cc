@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  */
 
-#include "cryb/otp-impl.h"
+#include "cryb/impl.h"
 
 /* gcc's <cstdint> is broken */
 #include <stdint.h>
