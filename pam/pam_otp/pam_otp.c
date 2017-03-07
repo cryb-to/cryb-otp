@@ -38,7 +38,7 @@
 
 #include <cryb/otp.h>
 
-PAM_EXTERN int
+int
 pam_sm_authenticate(pam_handle_t *pamh, int flags,
     int argc, const char *argv[])
 {
@@ -51,7 +51,7 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags,
 	return (PAM_AUTH_ERR);
 }
 
-PAM_EXTERN int
+int
 pam_sm_setcred(pam_handle_t *pamh, int flags,
     int argc, const char *argv[])
 {
@@ -63,5 +63,3 @@ pam_sm_setcred(pam_handle_t *pamh, int flags,
 	(void)argv;
 	return (PAM_SUCCESS);
 }
-
-PAM_MODULE_ENTRY("pam_otp");
