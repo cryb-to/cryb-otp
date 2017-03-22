@@ -341,3 +341,21 @@ PKG_HAVE_WITH_MODULES([$1],[$2],[$3],[$4])
 AS_IF([test "$AS_TR_SH([with_]m4_tolower([$1]))" = "yes"],
         [AC_DEFINE([HAVE_][$1], 1, [Enable ]m4_tolower([$1])[ support])])
 ])dnl PKG_HAVE_DEFINE_WITH_MODULES
+
+dnl PKG_HAVE_MODULES(VARIABLE-PREFIX, MODULES,
+dnl   [ACTION-IF-FOUND],[ACTION-IF-NOT-FOUND])
+dnl ------------------------------------------
+dnl
+dnl Convenience macro to run AM_CONDITIONAL and AC_DEFINE after
+dnl PKG_CHECK_MODULES. HAVE_[VARIABLE-PREFIX] is exported as make
+dnl and preprocessor variable.
+AC_DEFUN([PKG_HAVE_MODULES],
+[
+PKG_CHECK_MODULES([$1], [$2],
+  [m4_n([AS_TR_SH([ac_cv_have_]m4_tolower([$1]))=yes]) $3],
+  [m4_n([AS_TR_SH([ac_cv_have_]m4_tolower([$1]))=no]) $4])
+AS_IF([test x"$AS_TR_SH([ac_cv_have_]m4_tolower([$1]))" = x"yes"],
+  [AC_DEFINE([HAVE_][$1], 1, [Have ]m4_tolower([$1])[ available])])
+AM_CONDITIONAL([HAVE_][$1],
+  [test x"$AS_TR_SH([ac_cv_have_]m4_tolower([$1]))" = x"yes"])
+])dnl PKG_HAVE_MODULES
