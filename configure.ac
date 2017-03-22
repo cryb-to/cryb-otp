@@ -81,12 +81,11 @@ AC_CHECK_FUNCS([wcslcat wcslcmp wcslcpy])
 #
 
 # Cryb.to components
-PKG_HAVE_WITH_MODULES([CRYB_CORE], [cryb-core],
-  [Cryb.to core utilities])
-PKG_HAVE_WITH_MODULES([CRYB_OATH], [cryb-oath],
-  [Cryb.to Open Authentication primitives])
-PKG_HAVE_WITH_MODULES([CRYB_TEST], [cryb-test],
-  [Cryb.to test framework])
+PKG_CHECK_MODULES([CRYB_CORE], [cryb-core])
+PKG_CHECK_MODULES([CRYB_OATH], [cryb-oath])
+PKG_HAVE_MODULES([CRYB_TEST], [cryb-test],
+  [AC_MSG_NOTICE([Cryb test framework found, unit tests enabled.])],
+  [AC_MSG_WARN([Cryb test framework not found, unit tests disabled.])])
 
 # libpam
 save_LIBS="${LIBS}"
