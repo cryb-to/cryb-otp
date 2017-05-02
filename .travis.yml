@@ -6,11 +6,16 @@ compiler:
 dist: trusty
 sudo: required
 
+env:
+  global:
+   - CFLAGS="-Wno-unused-result"
+   - CRYB_TO=0.20170502
+
 before_install:
  - sudo apt-get update -q
  - sudo apt-get install -y pkg-config
- - wget https://github.com/cryb-to/cryb-to/releases/download/0.20170502/cryb-to_0.20170502-1_amd64.deb
- - sudo dpkg -i cryb-to_0.20170502-1_amd64.deb
+ - wget https://github.com/cryb-to/cryb-to/releases/download/${CRYB_TO}/cryb-to_${CRYB_TO}-1_amd64.deb
+ - sudo dpkg -i cryb-to_${CRYB_TO}-1_amd64.deb
 
 before_script:
  - ./autogen.sh
@@ -18,7 +23,3 @@ before_script:
 
 script:
  - make check
-
-env:
-  global:
-   - CFLAGS="-Wno-unused-result"
