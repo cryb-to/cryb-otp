@@ -18,3 +18,7 @@ before_script:
 
 script:
  - make check
+
+env:
+  global:
+   - CFLAGS="-Wno-unused-result"
