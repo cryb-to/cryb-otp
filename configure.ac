@@ -105,14 +105,14 @@ AC_SUBST(PAM_LIBS)
 
 # Documentation
 AC_ARG_ENABLE([doc],
-    AC_HELP_STRING([--disable-doc],
+    AS_HELP_STRING([--disable-doc],
 	[do not build the documentation]),
     [with_doc=$enableval])
 AM_CONDITIONAL([WITH_DOC], [test x"$with_doc" != x"no"])
 
 # Make utilities setuid
 AC_ARG_ENABLE([setuid],
-    AC_HELP_STRING([--disable-setuid],
+    AS_HELP_STRING([--disable-setuid],
 	[do not set the setuid bit on command-line utilities]),
     [enable_setuid=$enableval],
     [enable_setuid=yes])
@@ -144,7 +144,7 @@ AC_ARG_ENABLE([werror],
 
 # Everything
 AC_ARG_ENABLE([all],
-    AC_HELP_STRING([--disable-all],
+    AS_HELP_STRING([--disable-all],
         [disable all libraries and tools]),
     [enable_all=$enableval],
     [enable_all=yes])
@@ -152,7 +152,7 @@ AC_ARG_ENABLE([all],
 # Library
 elements="$elements lib"
 AC_ARG_ENABLE([otp-lib],
-    AC_HELP_STRING([--enable-otp-lib],
+    AS_HELP_STRING([--enable-otp-lib],
 	[build the OTP library]),
     [enable_otp_lib=$enableval],
     [enable_otp_lib=$enable_all])
@@ -162,7 +162,7 @@ AM_CONDITIONAL([OTP_LIB], [test x"$enable_otp_lib" = x"yes"])
 elements="$elements bsdauth"
 requires="$requires bsdauth:lib"
 AC_ARG_ENABLE([otp-bsdauth],
-    AC_HELP_STRING([--enable-otp-bsdauth],
+    AS_HELP_STRING([--enable-otp-bsdauth],
 	[build the BSD Auth module]),
     [enable_otp_bsdauth=$enableval],
     [enable_otp_bsdauth=$enable_all])
@@ -172,7 +172,7 @@ AM_CONDITIONAL([OTP_BSDAUTH], [test x"$enable_otp_bsdauth" = x"yes"])
 elements="$elements pam"
 requires="$requires pam:lib"
 AC_ARG_ENABLE([otp-pam],
-    AC_HELP_STRING([--enable-otp-pam],
+    AS_HELP_STRING([--enable-otp-pam],
 	[build the PAM module]),
     [enable_otp_pam=$enableval],
     [enable_otp_pam=$enable_all])
@@ -182,7 +182,7 @@ AM_CONDITIONAL([OTP_PAM], [test x"$enable_otp_pam" = x"yes"])
 elements="$elements radius"
 requires="$requires radius:lib"
 AC_ARG_ENABLE([otp-radius],
-    AC_HELP_STRING([--enable-otp-radius],
+    AS_HELP_STRING([--enable-otp-radius],
 	[build the RADIUS server]),
     [enable_otp_radius=$enableval],
     [enable_otp_radius=$enable_all])
@@ -192,7 +192,7 @@ AM_CONDITIONAL([OTP_RADIUS], [test x"$enable_otp_radius" = x"yes"])
 elements="$elements util"
 requires="$requires util:lib"
 AC_ARG_ENABLE([otp-util],
-    AC_HELP_STRING([--enable-otp-util],
+    AS_HELP_STRING([--enable-otp-util],
 	[build the command-line utilities]),
     [enable_otp_util=$enableval],
     [enable_otp_util=$enable_all])
