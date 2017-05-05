@@ -11,4 +11,4 @@ EXTRA_DIST = \
 	RELNOTES \
 	autogen.sh \
 	m4/ax_gcc_builtin.m4 \
-	m4/pkg.m4
+	m4/ax_pkg_config.m4

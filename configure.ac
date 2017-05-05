@@ -40,8 +40,7 @@ LT_PREREQ([2.2.6])
 LT_INIT()
 
 # pkg-config
-PKG_PROG_PKG_CONFIG
-PKG_INSTALLDIR
+AX_PROG_PKG_CONFIG
 
 # other programs
 AC_PROG_INSTALL
@@ -81,9 +80,11 @@ AC_CHECK_FUNCS([wcslcat wcslcmp wcslcpy])
 #
 
 # Cryb.to components
-PKG_CHECK_MODULES([CRYB_CORE], [cryb-core])
-PKG_CHECK_MODULES([CRYB_OATH], [cryb-oath])
-PKG_HAVE_MODULES([CRYB_TEST], [cryb-test],
+AX_PKG_CONFIG_REQUIRE([cryb-core])
+AX_PKG_CONFIG_REQUIRE([cryb-oath])
+
+# Cryb.to test framework
+AX_PKG_CONFIG_CHECK([cryb-test],
   [AC_MSG_NOTICE([Cryb test framework found, unit tests enabled.])],
   [AC_MSG_WARN([Cryb test framework not found, unit tests disabled.])])
 
