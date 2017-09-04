@@ -12,7 +12,6 @@
 /libtool
 /ltmain.sh
 /missing
-/mkpkgng
 *~
 .deps
 .libs
