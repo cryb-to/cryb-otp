@@ -9,7 +9,7 @@ sudo: required
 env:
   global:
    - CFLAGS="-Wno-unused-result"
-   - CRYB_TO=0.20170502
+   - CRYB_TO=0.20170904
 
 before_install:
  - sudo apt-get update -q
