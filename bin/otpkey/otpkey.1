@@ -1,5 +1,6 @@
 .\"-
-.\" Copyright (c) 2017 Dag-Erling Smørgrav
+.\" Copyright (c) 2013-2014 The University of Oslo
+.\" Copyright (c) 2016-2018 Dag-Erling Smørgrav
 .\" All rights reserved.
 .\"
 .\" Redistribution and use in source and binary forms, with or without
@@ -26,20 +27,112 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.Dd March 3, 2017
+.Dd April 26, 2018
 .Dt OTPKEY 1
 .Os
 .Sh NAME
 .Nm otpkey
-.Nd One-time password key management utility
+.Nd OTP key management tool
 .Sh SYNOPSIS
-.Cm Nm
+.Nm
+.Op Fl hnrvw
+.Op Fl u Ar user
+.Op Fl k Ar keyfile
+.Ar command
+.Op Ar args
 .Sh DESCRIPTION
-TBW
+The
+.Nm
+utility creates and manages OTP keys, and can be used to compute or
+validate an OTP response.
+.Pp
+The following options are available:
+.Bl -tag -width Fl
+.It Fl h
+Print a usage message and exit.
+.It Fl k Ar keyfile
+Specify the location of the keyfile on which to operate.
+The default is
+.Pa /var/oath/ Ns Ar user Ns Pa .otpauth .
+.It Fl n
+When printing codes with the
+.Cm calc
+command, print the counter or timestamp along with each code.
+.It Fl r
+Disable writeback mode.
+.It Fl u Ar user
+Specify the user on which to operate.
+The default is the current user.
+Only root may operate on other users.
+.It Fl v
+Enable verbose mode.
+.It Fl w
+Enable writeback mode (see below).
+This is the default.
+.El
+.Pp
+The commands are:
+.Bl -tag -width 6n
+.It Cm calc Op Ar count
+Compute and display the current code for the given key.
+If a count is specified, compute and display
+.Ar count
+codes in total, starting with the current code, up to a maximum of
+1,000 codes.
+If writeback mode is enabled, the user's keyfile is updated to prevent
+reuse.
+.It Cm genkey Ar hotp | totp
+Generate a new key for the specified OTP mode.
+If writeback mode is enabled, the user's key is set; otherwise, it is
+printed to standard output.
+.It Cm getkey
+Print the user's key.
+.It Cm geturi
+Print the user's key in otpauth URI form.
+.It Cm resync Ar code1 Ar code2 Op Ar code3
+Resynchronize an event-mode token that has moved too far ahead of the
+validation server.
+The codes provided must be consecutive codes within the
+resynchronization window.
+The resynchronization window is 100 if two codes are provided and 1000
+if three codes are provided.
+.It Cm setkey Ar uri
+Set the user's key to the given otpauth URI.
+.It Cm uri
+Deprecated synonym for
+.Cm geturi .
+.It Cm verify Ar code
+Verify that the given code is the correct current response for the
+user's key.
+If writeback mode is enabled and the response matched, the user's
+keyfile is updated to prevent reuse.
+.El
+.Sh EXIT STATUS
+The
+.Cm verify
+command exits 0 if the code is valid, 1 if it is invalid and >1 if an
+error occurred.
+.Pp
+The
+.Cm resync
+command exits 0 if resynchronization was successful, 1 if it failed or
+the specified key does not support resynchronization, and >1 if an
+error occurred.
+.Pp
+All other commands exit 0 if successful and >1 if an error occurred.
 .Sh SEE ALSO
-.Xr otpverify 8
+.Xr oath_hotp 3 ,
+.Xr oath_key 3 ,
+.Xr oath_totp 3
 .Sh AUTHORS
 The
 .Nm
 utility and this manual page were written by
-.An Dag-Erling Sm\(/orgrav Aq Mt des@des.no .
+.An Dag-Erling Sm\(/orgrav Aq Mt des@des.no
+for the University of Oslo.
+.Sh BUGS
+For TOTP keys, the
+.Cm calc Ar count
+command will only work correctly for a
+.Ar count
+of 1.
