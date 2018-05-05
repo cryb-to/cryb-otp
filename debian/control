@@ -1,0 +1,15 @@
+Source: cryb-otp
+Section: unknown
+Priority: optional
+Maintainer: Dag-Erling Smørgrav <des@des.no>
+Build-Depends: debhelper (>= 9), autotools-dev, cryb-to (>= 0.20180426)
+Standards-Version: 3.9.5
+Homepage: https://github.com/cryb-to/cryb-otp
+
+Package: cryb-otp
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${misc:Pre-Depends}
+Description: Collection of cryptographic and security-related libraries
+ The Cryb OTP package consists of a library and a set of utilities
+ which implement a variety of one-time-password authentication
+ mechanisms on top of algorithms provided by the Cryb libraries.
