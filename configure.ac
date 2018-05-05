@@ -4,6 +4,7 @@ AC_CONFIG_SRCDIR([include/cryb/otp.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign no-dist-gzip dist-xz])
 AM_CONFIG_HEADER([include/config.h])
+AM_MAINTAINER_MODE([enable])
 
 ############################################################################
 #
