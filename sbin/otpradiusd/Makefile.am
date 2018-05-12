@@ -7,8 +7,14 @@ sbin_PROGRAMS = otpradiusd
 otpradiusd_SOURCES = otpradiusd.c
 
 otpradiusd_CFLAGS = \
+	$(CRYB_OATH_CFLAGS) \
+	$(CRYB_DIGEST_CFLAGS) \
 	$(CRYB_CORE_CFLAGS)
 
-otpradiusd_LDADD = $(libotp)
+otpradiusd_LDADD = \
+	$(libotp) \
+	$(CRYB_OATH_CFLAGS) \
+	$(CRYB_DIGEST_CFLAGS) \
+	$(CRYB_CORE_CFLAGS)
 
 dist_man8_MANS = otpradiusd.8

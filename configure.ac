@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([cryb.otp], [0.20180426], [des@des.no], [cryb-otp], [http://cryb.to/])
+AC_INIT([cryb.otp], [0.20180506], [des@des.no], [cryb-otp], [http://cryb.to/])
 AC_CONFIG_SRCDIR([include/cryb/otp.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign no-dist-gzip dist-xz])
@@ -77,31 +77,6 @@ AC_CHECK_FUNCS([wcslcat wcslcmp wcslcpy])
 
 ############################################################################
 #
-# Extra libraries
-#
-
-# Cryb.to components
-AX_PKG_CONFIG_REQUIRE([cryb-core])
-AX_PKG_CONFIG_REQUIRE([cryb-oath])
-
-# Cryb.to test framework
-AX_PKG_CONFIG_CHECK([cryb-test],
-  [AC_MSG_NOTICE([Cryb test framework found, unit tests enabled.])],
-  [AC_MSG_WARN([Cryb test framework not found, unit tests disabled.])])
-
-# libpam
-save_LIBS="${LIBS}"
-LIBS=""
-AC_SEARCH_LIBS([pam_start], [pam], [
-  PAM_LIBS="${LIBS}"
-], [
-  PAM_LIBS=""
-])
-LIBS="${save_LIBS}"
-AC_SUBST(PAM_LIBS)
-
-############################################################################
-#
 # Build options
 #
 
@@ -143,77 +118,29 @@ AC_ARG_ENABLE([werror],
 #
 # Components
 #
+CRYB_INIT
 
-# Everything
-AC_ARG_ENABLE([all],
-    AS_HELP_STRING([--disable-all],
-        [disable all libraries and tools]),
-    [enable_all=$enableval],
-    [enable_all=yes])
+CRYB_LIB_REQUIRE([digest test])
 
-# Library
-elements="$elements lib"
-AC_ARG_ENABLE([otp-lib],
-    AS_HELP_STRING([--enable-otp-lib],
-	[build the OTP library]),
-    [enable_otp_lib=$enableval],
-    [enable_otp_lib=$enable_all])
-AM_CONDITIONAL([OTP_LIB], [test x"$enable_otp_lib" = x"yes"])
+CRYB_LIB_PROVIDE([otp], [core oath])
 
-# BSD Auth module
-elements="$elements bsdauth"
-requires="$requires bsdauth:lib"
-AC_ARG_ENABLE([otp-bsdauth],
-    AS_HELP_STRING([--enable-otp-bsdauth],
-	[build the BSD Auth module]),
-    [enable_otp_bsdauth=$enableval],
-    [enable_otp_bsdauth=$enable_all])
-AM_CONDITIONAL([OTP_BSDAUTH], [test x"$enable_otp_bsdauth" = x"yes"])
+CRYB_PROVIDE([bsdauth],	[otp])
+CRYB_PROVIDE([pam],	[otp])
+CRYB_PROVIDE([radius],	[otp])
+CRYB_PROVIDE([cli],	[otp])
 
-# PAM module
-elements="$elements pam"
-requires="$requires pam:lib"
-AC_ARG_ENABLE([otp-pam],
-    AS_HELP_STRING([--enable-otp-pam],
-	[build the PAM module]),
-    [enable_otp_pam=$enableval],
-    [enable_otp_pam=$enable_all])
-AM_CONDITIONAL([OTP_PAM], [test x"$enable_otp_pam" = x"yes"])
+if test x"$enable_cryb_pam" = x"yes" ; then
+    save_LIBS="${LIBS}"
+    LIBS=""
+    AC_CHECK_LIB([pam], [pam_start], [], [
+        AC_MSG_ERROR([libpam is required to build the PAM module])
+    ])
+    PAM_LIBS="${LIBS}"
+    LIBS="${save_LIBS}"
+    AC_SUBST(PAM_LIBS)
+fi
 
-# RADIUS server
-elements="$elements radius"
-requires="$requires radius:lib"
-AC_ARG_ENABLE([otp-radius],
-    AS_HELP_STRING([--enable-otp-radius],
-	[build the RADIUS server]),
-    [enable_otp_radius=$enableval],
-    [enable_otp_radius=$enable_all])
-AM_CONDITIONAL([OTP_RADIUS], [test x"$enable_otp_radius" = x"yes"])
-
-# Command-line utilities
-elements="$elements util"
-requires="$requires util:lib"
-AC_ARG_ENABLE([otp-util],
-    AS_HELP_STRING([--enable-otp-util],
-	[build the command-line utilities]),
-    [enable_otp_util=$enableval],
-    [enable_otp_util=$enable_all])
-AM_CONDITIONAL([OTP_UTIL], [test x"$enable_otp_util" = x"yes"])
-
-# Check dependencies
-AC_MSG_CHECKING([dependencies])
-for req in $requires ; do
-    lhs=${req%:*}
-    lhs_ena=`eval echo \\\$enable_otp_$lhs`
-    if test x"$lhs_ena" = x"yes" ; then
-        rhs=${req#*:}
-	rhs_ena=`eval echo \\\$enable_otp_$rhs`
-	if test x"$rhs_ena" != x"yes" ; then
-	    AC_MSG_ERROR([otp-$lhs requires otp-$rhs])
-	fi
-    fi
-done
-AC_MSG_RESULT([ok])
+CRYB_RESOLVE
 
 ############################################################################
 #
@@ -239,11 +166,4 @@ AC_CONFIG_FILES([
 ])
 AC_OUTPUT
 
-echo
-echo The following Cryb OTP components will be built:
-echo
-for elem in $elements ; do
-    enable=`eval echo \\\$enable_otp_$elem`
-    printf "%16s: %s\n" $elem ${enable:-no}
-done
-echo
+CRYB_SUMMARY

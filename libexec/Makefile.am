@@ -1,5 +1,5 @@
 SUBDIRS =
 
-if OTP_BSDAUTH
+if CRYB_BSDAUTH
 SUBDIRS += login_otp
-endif
+endif CRYB_BSDAUTH

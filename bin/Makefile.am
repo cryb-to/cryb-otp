@@ -1,5 +1,5 @@
 SUBDIRS =
 
-if OTP_UTIL
+if CRYB_CLI
 SUBDIRS += otpkey
-endif OTP_UTIL
+endif CRYB_CLI

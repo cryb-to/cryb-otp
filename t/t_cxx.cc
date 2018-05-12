@@ -57,7 +57,7 @@ public:
 		}							\
 	};
 
-#if WITH_OTP_LIB
+#if WITH_CRYB_OTP
 #include <cryb/otp.h>
 TEST(otp)
 #endif

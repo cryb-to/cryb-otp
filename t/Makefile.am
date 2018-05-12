@@ -14,14 +14,14 @@ TESTS += t_cxx
 t_cxx_SOURCES = t_cxx.cc
 t_cxx_CPPFLAGS = $(AM_CPPFLAGS) $(CRYB_CORE_CFLAGS)
 t_cxx_LDADD =
-if OTP_LIB
-t_cxx_CPPFLAGS += -DWITH_OTP_LIB
+if CRYB_OTP
+t_cxx_CPPFLAGS += -DWITH_CRYB_OTP
 t_cxx_LDADD += $(libotp)
-endif OTP_LIB
+endif CRYB_OTP
 
 # libcryb-otp
-if OTP_LIB
-endif OTP_LIB
+if CRYB_OTP
+endif CRYB_OTP
 
 check_PROGRAMS = $(TESTS)
 

@@ -1,5 +1,5 @@
 SUBDIRS =
 
-if OTP_RADIUS
+if CRYB_RADIUS
 SUBDIRS += otpradiusd
-endif OTP_RADIUS
+endif CRYB_RADIUS

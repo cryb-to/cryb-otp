@@ -1,5 +1,5 @@
 SUBDIRS =
 
-if OTP_LIB
+if CRYB_OTP
 SUBDIRS += otp
-endif OTP_LIB
+endif CRYB_OTP

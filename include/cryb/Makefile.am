@@ -2,9 +2,10 @@ crybdir = $(includedir)/cryb
 
 cryb_HEADERS =
 
-if OTP_LIB
-cryb_HEADERS += otp.h
-endif OTP_LIB
+if CRYB_OTP
+cryb_HEADERS += \
+	otp.h
+endif CRYB_OTP
 
 noinst_HEADERS = \
 	impl.h
