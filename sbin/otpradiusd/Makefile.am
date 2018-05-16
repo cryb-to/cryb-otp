@@ -18,9 +18,9 @@ otpradiusd_CFLAGS = \
 
 otpradiusd_LDADD = \
 	$(libotp) \
-	$(CRYB_OATH_CFLAGS) \
-	$(CRYB_DIGEST_CFLAGS) \
-	$(CRYB_CORE_CFLAGS)
+	$(CRYB_OATH_LIBS) \
+	$(CRYB_DIGEST_LIBS) \
+	$(CRYB_CORE_LIBS)
 
 dist_man8_MANS = otpradiusd.8
 
