@@ -68,7 +68,7 @@ static int issameuser;		/* real user same as target user */
  * Print key in hexadecimal form
  */
 static int
-oathkey_print_hex(oath_key *key)
+otpkey_print_hex(oath_key *key)
 {
 	unsigned int i;
 
@@ -82,7 +82,7 @@ oathkey_print_hex(oath_key *key)
  * Print key in otpauth URI form
  */
 static int
-oathkey_print_uri(oath_key *key)
+otpkey_print_uri(oath_key *key)
 {
 	char keyuri[MAX_KEYURI_SIZE];
 	size_t len;
@@ -100,7 +100,7 @@ oathkey_print_uri(oath_key *key)
  * Load key from file
  */
 static int
-oathkey_load(oath_key *key)
+otpkey_load(oath_key *key)
 {
 	char keyuri[MAX_KEYURI_SIZE];
 	ssize_t rlen;
@@ -144,7 +144,7 @@ oathkey_load(oath_key *key)
  * XXX liboath should take care of this for us
  */
 static int
-oathkey_save(oath_key *key)
+otpkey_save(oath_key *key)
 {
 	char keyuri[MAX_KEYURI_SIZE];
 	ssize_t wlen;
@@ -176,7 +176,7 @@ oathkey_save(oath_key *key)
  * Generate a new key
  */
 static int
-oathkey_genkey(int argc, char *argv[])
+otpkey_genkey(int argc, char *argv[])
 {
 	oath_key key;
 	oath_mode mode;
@@ -190,7 +190,7 @@ oathkey_genkey(int argc, char *argv[])
 		return (RET_UNAUTH);
 	if (oath_key_create(&key, mode, oh_undef, 0, "", user, NULL, 0) != 0)
 		return (RET_ERROR);
-	ret = readonly ? oathkey_print_uri(&key) : oathkey_save(&key);
+	ret = readonly ? otpkey_print_uri(&key) : otpkey_save(&key);
 	oath_key_destroy(&key);
 	return (ret);
 }
@@ -199,7 +199,7 @@ oathkey_genkey(int argc, char *argv[])
  * Set a user's key
  */
 static int
-oathkey_setkey(int argc, char *argv[])
+otpkey_setkey(int argc, char *argv[])
 {
 	oath_key key;
 	int ret;
@@ -212,7 +212,7 @@ oathkey_setkey(int argc, char *argv[])
 		return (RET_UNAUTH);
 	if (oath_key_from_uri(&key, argv[0]) != 0)
 		return (RET_ERROR);
-	ret = oathkey_save(&key);
+	ret = otpkey_save(&key);
 	oath_key_destroy(&key);
 	return (ret);
 }
@@ -221,7 +221,7 @@ oathkey_setkey(int argc, char *argv[])
  * Print raw key in hexadecimal
  */
 static int
-oathkey_getkey(int argc, char *argv[])
+otpkey_getkey(int argc, char *argv[])
 {
 	oath_key key;
 	int ret;
@@ -231,9 +231,9 @@ oathkey_getkey(int argc, char *argv[])
 	(void)argv;
 	if (!isroot && !issameuser)
 		return (RET_UNAUTH);
-	if ((ret = oathkey_load(&key)) != RET_SUCCESS)
+	if ((ret = otpkey_load(&key)) != RET_SUCCESS)
 		return (ret);
-	ret = oathkey_print_hex(&key);
+	ret = otpkey_print_hex(&key);
 	oath_key_destroy(&key);
 	return (ret);
 }
@@ -242,7 +242,7 @@ oathkey_getkey(int argc, char *argv[])
  * Print the otpauth URI for a key
  */
 static int
-oathkey_geturi(int argc, char *argv[])
+otpkey_geturi(int argc, char *argv[])
 {
 	oath_key key;
 	int ret;
@@ -252,9 +252,9 @@ oathkey_geturi(int argc, char *argv[])
 	(void)argv;
 	if (!isroot && !issameuser)
 		return (RET_UNAUTH);
-	if ((ret = oathkey_load(&key)) != RET_SUCCESS)
+	if ((ret = otpkey_load(&key)) != RET_SUCCESS)
 		return (ret);
-	ret = oathkey_print_uri(&key);
+	ret = otpkey_print_uri(&key);
 	oath_key_destroy(&key);
 	return (ret);
 }
@@ -263,7 +263,7 @@ oathkey_geturi(int argc, char *argv[])
  * Check whether a given response is correct for the given keyfile.
  */
 static int
-oathkey_verify(int argc, char *argv[])
+otpkey_verify(int argc, char *argv[])
 {
 	oath_key key;
 	unsigned long counter;
@@ -273,7 +273,7 @@ oathkey_verify(int argc, char *argv[])
 
 	if (argc < 1)
 		return (RET_USAGE);
-	if ((ret = oathkey_load(&key)) != RET_SUCCESS)
+	if ((ret = otpkey_load(&key)) != RET_SUCCESS)
 		return (ret);
 	response = strtoul(*argv, &end, 10);
 	if (end == *argv || *end != '\0')
@@ -299,7 +299,7 @@ oathkey_verify(int argc, char *argv[])
 	if (verbose)
 		warnx("response: %u %s", response,
 		    match ? "matched" : "did not match");
-	ret = match ? readonly ? RET_SUCCESS : oathkey_save(&key) : RET_FAILURE;
+	ret = match ? readonly ? RET_SUCCESS : otpkey_save(&key) : RET_FAILURE;
 	oath_key_destroy(&key);
 	return (ret);
 }
@@ -308,7 +308,7 @@ oathkey_verify(int argc, char *argv[])
  * Compute the current code
  */
 static int
-oathkey_calc(int argc, char *argv[])
+otpkey_calc(int argc, char *argv[])
 {
 	oath_key key;
 	unsigned int current;
@@ -326,7 +326,7 @@ oathkey_calc(int argc, char *argv[])
 	} else {
 		n = 1;
 	}
-	if ((ret = oathkey_load(&key)) != RET_SUCCESS)
+	if ((ret = otpkey_load(&key)) != RET_SUCCESS)
 		return (ret);
 	for (i = 0; i < n; ++i) {
 		switch (key.mode) {
@@ -352,7 +352,7 @@ oathkey_calc(int argc, char *argv[])
 		printf("%.*d\n", (int)key.digits, current);
 	}
 	if (ret == RET_SUCCESS && !readonly)
-		ret = oathkey_save(&key);
+		ret = otpkey_save(&key);
 	oath_key_destroy(&key);
 	return (ret);
 }
@@ -361,7 +361,7 @@ oathkey_calc(int argc, char *argv[])
  * Resynchronize
  */
 static int
-oathkey_resync(int argc, char *argv[])
+otpkey_resync(int argc, char *argv[])
 {
 	oath_key key;
 	unsigned long counter;
@@ -379,7 +379,7 @@ oathkey_resync(int argc, char *argv[])
 		w = w * (HOTP_WINDOW + 1);
 	}
 	w -= n;
-	if ((ret = oathkey_load(&key)) != RET_SUCCESS)
+	if ((ret = otpkey_load(&key)) != RET_SUCCESS)
 		return (ret);
 	switch (key.mode) {
 	case om_hotp:
@@ -406,7 +406,7 @@ oathkey_resync(int argc, char *argv[])
 	}
 	if (verbose)
 		warnx("resynchronization %s", match ? "succeeded" : "failed");
-	ret = match ? readonly ? RET_SUCCESS : oathkey_save(&key) : RET_FAILURE;
+	ret = match ? readonly ? RET_SUCCESS : otpkey_save(&key) : RET_FAILURE;
 	oath_key_destroy(&key);
 	return (ret);
 }
@@ -521,19 +521,19 @@ main(int argc, char *argv[])
 	if (strcmp(cmd, "help") == 0)
 		ret = RET_USAGE;
 	else if (strcmp(cmd, "calc") == 0)
-		ret = oathkey_calc(argc, argv);
+		ret = otpkey_calc(argc, argv);
 	else if (strcmp(cmd, "genkey") == 0)
-		ret = oathkey_genkey(argc, argv);
+		ret = otpkey_genkey(argc, argv);
 	else if (strcmp(cmd, "getkey") == 0)
-		ret = oathkey_getkey(argc, argv);
+		ret = otpkey_getkey(argc, argv);
 	else if (strcmp(cmd, "geturi") == 0 || strcmp(cmd, "uri") == 0)
-		ret = oathkey_geturi(argc, argv);
+		ret = otpkey_geturi(argc, argv);
 	else if (strcmp(cmd, "resync") == 0)
-		ret = oathkey_resync(argc, argv);
+		ret = otpkey_resync(argc, argv);
 	else if (strcmp(cmd, "setkey") == 0)
-		ret = oathkey_setkey(argc, argv);
+		ret = otpkey_setkey(argc, argv);
 	else if (strcmp(cmd, "verify") == 0)
-		ret = oathkey_verify(argc, argv);
+		ret = otpkey_verify(argc, argv);
 	else
 		ret = RET_USAGE;
 
