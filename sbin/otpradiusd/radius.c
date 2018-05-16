@@ -206,6 +206,42 @@ static struct rad_attr_def {
 	[rac_framed_appletalk_zone] = {
 		.name = "Framed-AppleTalk-Zone",
 	},
+	[rac_acct_status_type] = {
+		.name = "Acct-Status-Type",
+	},
+	[rac_acct_delay_time] = {
+		.name = "Acct-Delay-Time",
+	},
+	[rac_acct_input_octets] = {
+		.name = "Acct-Input-Octets",
+	},
+	[rac_acct_output_octets] = {
+		.name = "Acct-Output-Octets",
+	},
+	[rac_acct_session_id] = {
+		.name = "Acct-Session-Id",
+	},
+	[rac_acct_authentic] = {
+		.name = "Acct-Authentic",
+	},
+	[rac_acct_session_time] = {
+		.name = "Acct-Session-Time",
+	},
+	[rac_acct_input_packets] = {
+		.name = "Acct-Input-Packets",
+	},
+	[rac_acct_output_packets] = {
+		.name = "Acct-Output-Packets",
+	},
+	[rac_acct_terminate_cause] = {
+		.name = "Acct-Terminate-Cause",
+	},
+	[rac_acct_multi_session_id] = {
+		.name = "Acct-Multi-Session-Id",
+	},
+	[rac_acct_link_count] = {
+		.name = "Acct-Link-Count",
+	},
 	[rac_chap_challenge] = {
 		.name = "CHAP-Challenge",
 	},
