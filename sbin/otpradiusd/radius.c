@@ -91,15 +91,30 @@ typedef enum rad_attr_type {
 
 static struct rad_attr_def {
 	const char		*name;
+	rad_attr_type		 type;
+	/* min / max lengths of value */
+#define RAT_MIN_LENGTH 1
+	size_t			 min;
+#define RAT_MAX_LENGTH 253
+	size_t			 max;
 } rad_attr_def[rac_max] = {
 	[rac_unknown_attr] = {
 		.name = "Unknown-Attribute",
+		.type = rat_unknown,
+		.min = 0,
+		.max = 0,
 	},
 	[rac_user_name] = {
 		.name = "User-Name",
+		.type = rat_string,
+		.min = RAT_MIN_LENGTH,
+		.max = RAT_MAX_LENGTH,
 	},
 	[rac_user_password] = {
 		.name = "User-Password",
+		.type = rat_string,
+		.min = RAT_MIN_LENGTH,
+		.max = 128,
 	},
 	[rac_chap_password] = {
 		.name = "CHAP-Password",
@@ -181,9 +196,15 @@ static struct rad_attr_def {
 	},
 	[rac_calling_station_id] = {
 		.name = "Calling-Station-Id",
+		.type = rat_string,
+		.min = RAT_MIN_LENGTH,
+		.max = RAT_MAX_LENGTH,
 	},
 	[rac_nas_identifier] = {
 		.name = "NAS-Identifier",
+		.type = rat_string,
+		.min = RAT_MIN_LENGTH,
+		.max = RAT_MAX_LENGTH,
 	},
 	[rac_proxy_state] = {
 		.name = "Proxy-State",
