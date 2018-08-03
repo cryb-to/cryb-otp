@@ -38,6 +38,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <cryb/assert.h>
 #include <cryb/md5.h>
 #include <cryb/memset_s.h>
 
@@ -55,7 +56,7 @@ auth_encode(const uint8_t *nonce, const uint8_t *pt,
 	const uint8_t *key;
 	unsigned int i;
 
-	// assert(len % 16 == 0);
+	assert(len % 16 == 0);
 	md5_init(&ctx);
 	md5_update(&ctx, rad_secret, rad_secret_len);
 	sctx = ctx;
@@ -83,7 +84,7 @@ auth_decode(const uint8_t *nonce, const uint8_t *ct,
 	const uint8_t *key;
 	unsigned int i;
 
-	// assert(len % 16 == 0);
+	assert(len % 16 == 0);
 	md5_init(&ctx);
 	md5_update(&ctx, rad_secret, rad_secret_len);
 	sctx = ctx;
