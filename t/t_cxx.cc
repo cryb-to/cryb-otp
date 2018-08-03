@@ -58,6 +58,7 @@ public:
 	};
 
 #if WITH_CRYB_OTP
+#include <cryb/oath.h>
 #include <cryb/otp.h>
 TEST(otp)
 #endif
