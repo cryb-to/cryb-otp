@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2017 Dag-Erling Smørgrav
+ * Copyright (c) 2018 The University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,40 +27,14 @@
  * SUCH DAMAGE.
  */
 
-#include "cryb/impl.h"
+#ifndef CRYB_OTP_IMPL_H_INCLUDED
+#define CRYB_OTP_IMPL_H_INCLUDED
 
-#define PAM_SM_AUTH
+/* XXX hardcoded windows */
+#define HOTP_WINDOW	9
+#define TOTP_WINDOW	2
 
-#include <stdint.h>
+struct otp_store {
+};
 
-#include <security/pam_modules.h>
-#include <security/pam_appl.h>
-
-#include <cryb/oath.h>
-#include <cryb/otp.h>
-
-int
-pam_sm_authenticate(pam_handle_t *pamh, int flags,
-    int argc, const char *argv[])
-{
-
-	/* unused */
-	(void)pamh;
-	(void)flags;
-	(void)argc;
-	(void)argv;
-	return (PAM_AUTH_ERR);
-}
-
-int
-pam_sm_setcred(pam_handle_t *pamh, int flags,
-    int argc, const char *argv[])
-{
-
-	/* unused */
-	(void)pamh;
-	(void)flags;
-	(void)argc;
-	(void)argv;
-	return (PAM_SUCCESS);
-}
+#endif

@@ -45,6 +45,7 @@
 
 #include <cryb/ctype.h>
 #include <cryb/oath.h>
+#include <cryb/otp.h>
 #include <cryb/strlcmp.h>
 
 #define MAX_KEYURI_SIZE	4096
@@ -267,7 +268,7 @@ otpkey_verify(int argc, char *argv[])
 {
 	oath_key key;
 	unsigned long counter;
-	unsigned int response;
+	unsigned long response;
 	char *end;
 	int match, ret;
 
@@ -278,27 +279,18 @@ otpkey_verify(int argc, char *argv[])
 	response = strtoul(*argv, &end, 10);
 	if (end == *argv || *end != '\0')
 		response = UINT_MAX; /* never valid */
-	switch (key.mode) {
-	case om_hotp:
+	if (key.mode == om_hotp)
 		counter = key.counter;
-		match = oath_hotp_match(&key, response, HOTP_WINDOW);
-		if (verbose && match > 0 && key.counter > counter + 1)
-			warnx("skipped %lu codes", key.counter - counter - 1);
-		break;
-	case om_totp:
-		match = oath_totp_match(&key, response, TOTP_WINDOW);
-		break;
-	default:
-		match = -1;
-	}
-	/* oath_*_match() return -1 on error, 0 on failure, 1 on success */
+	match = otp_verify(&key, response);
 	if (match < 0) {
 		warnx("OATH error");
 		match = 0;
 	}
-	if (verbose)
-		warnx("response: %u %s", response,
-		    match ? "matched" : "did not match");
+	if (verbose) {
+		warnx("response %s", match ? "matched" : "did not match");
+		if (key.mode == om_hotp && key.counter > counter + 1)
+			warnx("skipped %lu codes", key.counter - counter - 1);
+	}
 	ret = match ? readonly ? RET_SUCCESS : otpkey_save(&key) : RET_FAILURE;
 	oath_key_destroy(&key);
 	return (ret);
@@ -365,7 +357,7 @@ otpkey_resync(int argc, char *argv[])
 {
 	oath_key key;
 	unsigned long counter;
-	unsigned int response[3];
+	unsigned long response[3];
 	char *end;
 	int i, match, n, ret, w;
 
@@ -381,31 +373,18 @@ otpkey_resync(int argc, char *argv[])
 	w -= n;
 	if ((ret = otpkey_load(&key)) != RET_SUCCESS)
 		return (ret);
-	switch (key.mode) {
-	case om_hotp:
-		/* this should be a library function */
+	if (key.mode == om_hotp)
 		counter = key.counter;
-		match = 0;
-		while (key.counter < counter + w && match == 0) {
-			match = oath_hotp_match(&key, response[0],
-			    counter + w - key.counter - 1);
-			if (match <= 0)
-				break;
-			for (i = 1; i < n && match > 0; ++i)
-				match = oath_hotp_match(&key, response[i], 0);
-		}
-		if (verbose && match > 0)
-			warnx("skipped %lu codes", key.counter - counter);
-		break;
-	default:
-		match = -1;
-	}
+	match = otp_resync(&key, response, n);
 	if (match < 0) {
 		warnx("OATH error");
 		match = 0;
 	}
-	if (verbose)
+	if (verbose) {
 		warnx("resynchronization %s", match ? "succeeded" : "failed");
+		if (counter > key.counter + 1)
+			warnx("skipped %lu codes", key.counter - counter);
+	}
 	ret = match ? readonly ? RET_SUCCESS : otpkey_save(&key) : RET_FAILURE;
 	oath_key_destroy(&key);
 	return (ret);

@@ -29,9 +29,10 @@
 
 #include "cryb/impl.h"
 
+#include <stddef.h>
 #include <stdint.h>
-#include <unistd.h>
 
+#include <cryb/oath.h>
 #include <cryb/otp.h>
 
 static const char *cryb_otp_version_string = PACKAGE_VERSION;

@@ -3,6 +3,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 lib_LTLIBRARIES = libcryb-otp.la
 
 libcryb_otp_la_SOURCES = \
+	cryb_otp_resync.c \
+	cryb_otp_verify.c \
 	\
 	cryb_otp.c
 

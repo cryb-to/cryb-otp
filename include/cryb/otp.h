@@ -38,6 +38,12 @@ CRYB_BEGIN
 
 const char *cryb_otp_version(void);
 
+#define otp_verify		cryb_otp_verify
+#define otp_resync		cryb_otp_resync
+
+int otp_verify(oath_key *, unsigned long);
+int otp_resync(oath_key *, unsigned long *, unsigned int);
+
 CRYB_END
 
 #endif

@@ -1,5 +1,6 @@
 /*-
- * Copyright (c) 2017 Dag-Erling Smørgrav
+ * Copyright (c) 2013-2018 The University of Oslo
+ * Copyright (c) 2016-2018 Dag-Erling Smørgrav
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,38 +30,46 @@
 
 #include "cryb/impl.h"
 
-#define PAM_SM_AUTH
-
+#include <stddef.h>
 #include <stdint.h>
 
-#include <security/pam_modules.h>
-#include <security/pam_appl.h>
-
+#include <cryb/assert.h>
 #include <cryb/oath.h>
 #include <cryb/otp.h>
 
+#include "cryb_otp_impl.h"
+
+/*
+ * Check whether a given response is correct for the given keyfile.
+ */
 int
-pam_sm_authenticate(pam_handle_t *pamh, int flags,
-    int argc, const char *argv[])
+otp_verify(oath_key *key, unsigned long response)
 {
+	uint64_t prev;
+	int ret;
 
-	/* unused */
-	(void)pamh;
-	(void)flags;
-	(void)argc;
-	(void)argv;
-	return (PAM_AUTH_ERR);
-}
-
-int
-pam_sm_setcred(pam_handle_t *pamh, int flags,
-    int argc, const char *argv[])
-{
-
-	/* unused */
-	(void)pamh;
-	(void)flags;
-	(void)argc;
-	(void)argv;
-	return (PAM_SUCCESS);
+	switch (key->mode) {
+	case om_hotp:
+		prev = key->counter;
+		ret = oath_hotp_match(key, response, HOTP_WINDOW);
+		assertf(key->counter >= prev, "counter went backwads");
+		if (ret > 0) {
+			assertf(key->counter > prev, "counter did not advance");
+			ret = key->counter - prev - 1;
+		}
+		break;
+	case om_totp:
+		prev = key->lastused;
+		ret = oath_totp_match(key, response, TOTP_WINDOW);
+		assertf(key->lastused >= prev, "lastused went backwards");
+		if (ret > 0) {
+			assertf(key->lastused > prev, "lastused did not advance");
+			ret = key->lastused - prev / key->timestep;
+		}
+		break;
+	default:
+		ret = -1;
+	}
+	/* oath_*_ret() return -1 on error, 0 on failure, 1 on success */
+	return (ret);
 }

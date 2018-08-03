@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <cryb/oath.h>
 #include <cryb/otp.h>
 
 static void
