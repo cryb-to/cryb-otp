@@ -301,7 +301,7 @@ rad_decode_str(const rad_attribute *ra, const uint8_t **str, size_t *len)
 	return (0);
 }
 
-
+#if DEBUG_PRINTF
 static void
 mxu(md5_ctx *context, const void *data, unsigned int len)
 {
@@ -315,6 +315,7 @@ mxu(md5_ctx *context, const void *data, unsigned int len)
 }
 #undef md5_update
 #define md5_update mxu
+#endif
 
 static int
 handle_access_request(rad_transaction *rx)
@@ -325,8 +326,6 @@ handle_access_request(rad_transaction *rx)
 	uint8_t *nextra, *end;
 	const uint8_t *user, *pass;
 	size_t userlen, passlen;
-	unsigned int i;
-	int ch;
 
 	req = &rx->request;
 	rsp = &rx->response;
@@ -380,31 +379,35 @@ handle_access_request(rad_transaction *rx)
 		warnx("mssing User-Name attribute");
 		return (0);
 	}
+#if DEBUG_PRINTF
 	fprintf(stderr, "user: \"");
-	for (i = 0; i < userlen; ++i) {
-		ch = user[i];
+	for (unsigned int i = 0; i < userlen; ++i) {
+		int ch = user[i];
 		if (ch >= 32 && ch < 127 && ch != '"')
 			fprintf(stderr, "%c", ch);
 		else
 			fprintf(stderr, "\\x%02x", ch);
 	}
 	fprintf(stderr, "\"\n");
+#endif
 	if (pass == NULL) {
 		warnx("missing User-Password attribute");
 		return (0);
 	}
-	fprintf(stderr, "pass: \"");
 	auth_decode(req->authenticator, pass, password, passlen);
 	while (password[passlen - 1] == '\0')
 		passlen--;
-	for (i = 0; i < passlen; ++i) {
-		ch = password[i];
+#if DEBUG_PRINTF
+	fprintf(stderr, "pass: \"");
+	for (unsigned int i = 0; i < passlen; ++i) {
+		int ch = password[i];
 		if (ch >= 32 && ch < 127 && ch != '"')
 			fprintf(stderr, "%c", ch);
 		else
 			fprintf(stderr, "\\x%02x", ch);
 	}
 	fprintf(stderr, "\"\n");
+#endif
 
 	static int coin;
 	if ((coin = !coin)) {
