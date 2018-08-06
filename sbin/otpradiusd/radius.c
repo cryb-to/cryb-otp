@@ -39,6 +39,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <cryb/assert.h>
 #include <cryb/md5.h>
 
 #include "otpradiusd.h"
@@ -291,7 +292,7 @@ rad_decode_str(const rad_attribute *ra, const uint8_t **str, size_t *len)
 		warnx("unknown attribute 0x%02x", ra->code);
 		return (-1);
 	}
-	// assert(rad_attr_def[rac].type == rat_string);
+	assert(rad_attr_def[rac].type == rat_string);
 	if ((int)ra->length < 3 || (int)ra->length > MAX_RADATTR_LEN) {
 		warnx("invalid attribute length");
 		return (-1);
@@ -333,6 +334,7 @@ handle_access_request(rad_transaction *rx)
 	end = (uint8_t *)&rx->request + rx->reqlen;
 	user = pass = NULL;
 	userlen = passlen = 0;
+	assert(req->code == rmc_access_request);
 	while (nextra + MIN_RADATTR_LEN < end) {
 		ra = (rad_attribute *)nextra;
 		if ((int)ra->length < MIN_RADATTR_LEN ||
