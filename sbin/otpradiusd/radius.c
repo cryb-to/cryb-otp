@@ -292,7 +292,7 @@ rad_decode_str(const rad_attribute *ra, const uint8_t **str, size_t *len)
 		return (-1);
 	}
 	// assert(rad_attr_def[rac].type == rat_string);
-	if (ra->length < 3 || ra->length > MAX_RADATTR_LEN) {
+	if ((int)ra->length < 3 || (int)ra->length > MAX_RADATTR_LEN) {
 		warnx("invalid attribute length");
 		return (-1);
 	}
@@ -335,9 +335,9 @@ handle_access_request(rad_transaction *rx)
 	userlen = passlen = 0;
 	while (nextra + MIN_RADATTR_LEN < end) {
 		ra = (rad_attribute *)nextra;
-		if (ra->length < MIN_RADATTR_LEN ||
-		    ra->length > MAX_RADATTR_LEN ||
-		    ra->length > end - nextra) {
+		if ((int)ra->length < MIN_RADATTR_LEN ||
+		    (int)ra->length > MAX_RADATTR_LEN ||
+		    (int)ra->length > end - nextra) {
 			warnx("invalid attribute length %u", ra->length);
 			return (0);
 		}
