@@ -8,7 +8,7 @@ compiler:
 
 env:
   global:
-   - CFLAGS="-Wno-unused-result"
+   - CFLAGS="-Wno-unused-result -Wno-type-limits"
    - CRYB_TO=0.20190326
 
 before_install:
