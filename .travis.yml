@@ -9,7 +9,7 @@ compiler:
 env:
   global:
    - CFLAGS="-Wno-unused-result"
-   - CRYB_TO=0.20181115
+   - CRYB_TO=0.20190326
 
 before_install:
  - sudo apt-get update -q
