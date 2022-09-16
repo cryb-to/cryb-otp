@@ -8,6 +8,9 @@ libcryb_otp_la_SOURCES = \
 	\
 	cryb_otp.c
 
+noinst_HEADERS = \
+	cryb_otp_impl.h
+
 libcryb_otp_la_CFLAGS = \
 	 $(CRYB_CORE_CFLAGS) \
 	 $(CRYB_OATH_CFLAGS)

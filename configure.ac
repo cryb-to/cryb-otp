@@ -1,5 +1,5 @@
-AC_PREREQ([2.63])
-AC_INIT([cryb.otp], [0.20190326], [des@des.no], [cryb-otp], [http://cryb.to/])
+AC_PREREQ([2.69])
+AC_INIT([cryb.otp], [0.20220916], [des@des.no], [cryb-otp], [http://cryb.to/])
 AC_CONFIG_SRCDIR([include/cryb/otp.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign no-dist-gzip dist-xz])
@@ -14,10 +14,9 @@ AM_MAINTAINER_MODE([enable])
 # C compiler and features
 AC_LANG(C)
 AC_PROG_CC([clang gcc cc])
-AC_PROG_CC_STDC
 AC_PROG_CPP
 AC_PROG_CXX([clang++ g++ c++])
-AC_GNU_SOURCE
+AC_USE_SYSTEM_EXTENSIONS
 AC_C_CONST
 AC_C_RESTRICT
 AC_C_VOLATILE
@@ -149,6 +148,7 @@ CRYB_RESOLVE
 
 AC_CONFIG_FILES([
     Makefile
+    freebsd/Makefile
     include/Makefile
     include/cryb/Makefile
     lib/Makefile
