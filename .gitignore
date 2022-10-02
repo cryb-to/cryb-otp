@@ -7,11 +7,11 @@
 /config.sub
 /configure
 /depcomp
-/test-driver
 /install-sh
 /libtool
 /ltmain.sh
 /missing
+/test-driver
 *~
 .deps
 .libs
@@ -21,6 +21,7 @@
 *.pc
 *.o
 *.trs
+*.xz
 Makefile
 Makefile.in
 test.cov

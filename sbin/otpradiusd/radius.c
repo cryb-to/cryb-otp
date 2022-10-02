@@ -1,5 +1,6 @@
 /*-
  * Copyright (c) 2018 The University of Oslo
+ * Copyright (c) 2019-2022 Dag-Erling Smørgrav
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,6 +44,8 @@
 #include <cryb/md5.h>
 
 #include "otpradiusd.h"
+
+#define DEBUG_PRINTF 1
 
 static struct rad_msg_def {
 	const char		*name;
@@ -411,6 +414,16 @@ handle_access_request(rad_transaction *rx)
 	fprintf(stderr, "\"\n");
 #endif
 
+	/*
+	 * TODO:
+	 *
+	 * Create concept of keystore in libcryb-otp
+	 * Configure / open keystore at start of otpradiusd
+	 * On receipt of request, request key from keystore
+	 * Verify request
+	 * Report outcome to keystore
+	 * Report outcome to client
+	 */
 	static int coin;
 	if ((coin = !coin)) {
 		/* accept */
@@ -447,6 +460,7 @@ int
 rad_handle(rad_transaction *rx)
 {
 	rad_message *req, *rsp;
+	rad_msg_code rmc;
 	int ret;
 
 	req = &rx->request;
@@ -460,18 +474,20 @@ rad_handle(rad_transaction *rx)
 		warnx("invalid length: %zu", rx->reqlen);
 		return (0);
 	}
-	warnx("request 0x%02x (%s) ident 0x%02x", req->code,
-	    rad_msg_name(req->code), req->identifier);
+	rmc = req->code;
+	if (rmc >= rmc_max || rad_attr_def[rmc].name == NULL) {
+		warnx("unknown message 0x%02x", req->code);
+		return (-1);
+	}
+	warnx("request 0x%02x (%s) ident 0x%02x", rmc,
+	    rad_msg_name(rmc), req->identifier);
 	memset(rsp, 0, sizeof *rsp);
 	rsp->identifier = req->identifier;
 	memcpy(rsp->authenticator, req->authenticator, 16);
-	switch ((rad_msg_code)req->code) {
+	switch (rmc) {
 	case rmc_access_request:
 		ret = handle_access_request(rx);
 		break;
-	default:
-		warnx("unsupported RADIUS code %u", req->code);
-		return (0);
 	}
 	if (ret > 0) {
 		rx->rsplen = ntohs(rsp->length);

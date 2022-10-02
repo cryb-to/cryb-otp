@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2017-2022 Dag-Erling Smørgrav
+ * Copyright (c) 2022 Dag-Erling Smørgrav
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,24 +27,30 @@
  * SUCH DAMAGE.
  */
 
-#ifndef CRYB_OTP_H_INCLUDED
-#define CRYB_OTP_H_INCLUDED
+#ifndef CRYB_OTP_TYPES_H_INCLUDED
+#define CRYB_OTP_TYPES_H_INCLUDED
 
 #ifndef CRYB_TO
 #include <cryb/to.h>
 #endif
 
-#include <cryb/otp_store.h>
-
 CRYB_BEGIN
 
-const char *cryb_otp_version(void);
+#define otp_handle	cryb_otp_handle
+#define otp_id		cryb_otp_id
 
-#define otp_verify		cryb_otp_verify
-#define otp_resync		cryb_otp_resync
+/*
+ * OTP handle: pointer to opaque structure used by the storage backend.
+ */
+typedef void *otp_handle;
 
-int otp_verify(oath_key *, unsigned long);
-int otp_resync(oath_key *, unsigned long *, unsigned int);
+/*
+ * OTP identity
+ */
+typedef struct {
+	char		 login[OTP_MAX_LOGINLEN];
+	otp_handle	 handle;
+} otp_id;
 
 CRYB_END
 

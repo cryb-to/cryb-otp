@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2017-2022 Dag-Erling Smørgrav
+ * Copyright (c) 2022 Dag-Erling Smørgrav
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,24 +27,32 @@
  * SUCH DAMAGE.
  */
 
-#ifndef CRYB_OTP_H_INCLUDED
-#define CRYB_OTP_H_INCLUDED
+#ifndef CRYB_OTP_STORE_H_INCLUDED
+#define CRYB_OTP_STORE_H_INCLUDED
 
 #ifndef CRYB_TO
 #include <cryb/to.h>
 #endif
 
-#include <cryb/otp_store.h>
-
 CRYB_BEGIN
 
-const char *cryb_otp_version(void);
+#define otp_key			cryb_otp_key
+#define otp_store		cryb_otp_store
+#define otp_store_open		cryb_otp_store_open
+#define otp_store_close		cryb_otp_store_close
+#define otp_store_has		cryb_otp_store_has
+#define otp_store_lock		cryb_otp_store_lock
+#define otp_store_release	cryb_otp_store_release
+#define otp_store_commit	cryb_otp_store_commit
 
-#define otp_verify		cryb_otp_verify
-#define otp_resync		cryb_otp_resync
+typedef struct otp_key otp_key;
+typedef struct otp_store otp_store;
 
-int otp_verify(oath_key *, unsigned long);
-int otp_resync(oath_key *, unsigned long *, unsigned int);
+otp_store *otp_store_open(const char *);
+otp_key *otp_store_has(otp_store *, const char *);
+otp_key *otp_store_lock(otp_store *, const char *);
+otp_key *otp_store_release(otp_store *, const char *);
+otp_key *otp_store_commit(otp_store *, const char *);
 
 CRYB_END
 

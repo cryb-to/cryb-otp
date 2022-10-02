@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2017-2022 Dag-Erling Smørgrav
+ * Copyright (c) 2022 Dag-Erling Smørgrav
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,25 +27,11 @@
  * SUCH DAMAGE.
  */
 
-#ifndef CRYB_OTP_H_INCLUDED
-#define CRYB_OTP_H_INCLUDED
+#include "cryb/impl.h"
 
-#ifndef CRYB_TO
-#include <cryb/to.h>
-#endif
+#include <stddef.h>
+#include <stdint.h>
 
-#include <cryb/otp_store.h>
+#include <cryb/oath.h>
+#include <cryb/otp.h>
 
-CRYB_BEGIN
-
-const char *cryb_otp_version(void);
-
-#define otp_verify		cryb_otp_verify
-#define otp_resync		cryb_otp_resync
-
-int otp_verify(oath_key *, unsigned long);
-int otp_resync(oath_key *, unsigned long *, unsigned int);
-
-CRYB_END
-
-#endif
